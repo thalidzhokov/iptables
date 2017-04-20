@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# ONLY FUNCTIONS
+# Only functions
 
 # Policy accept
 policy_accept() {

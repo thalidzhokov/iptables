@@ -1,34 +1,10 @@
 #!/bin/bash
-
 # Last update 2017-04-05
 # NOTICE! Add crontab task
 # e.g.  17      17      *       *       *       bash /opt/hdh-iptables/rules-ve.sh >> /opt/hdh-iptables/iptables-rules-ve.log
 
 date
-
-# VARIABLES
-
-# IPv4 e.g.
-# 88.99.68.28
-# OR $(ip addr show eth0 | grep 'inet ' | cut -f2 | awk '{print $2}')
-# OR multiple $(ip -o -4 addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)
-# OR other function
-HN_IPS="$(ip -o -4 addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)"
-echo "HN_IPS ${HN_IPS[@]}"
-
-# IPv6 e.g.
-# 2a01:4f8:10a:145b::128
-# OR $(ip addr show eth0 | grep 'inet6 ' | cut -f2 | awk '{ print $2}' | sed -e "s/\/.*$//")
-# OR multiple $(ip -o -6 addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)
-# OR other function
-HN_IPS6="$(ip -o -6 addr show up primary scope global | while read -r num dev fam addr rest; do echo ${addr%/*}; done)"
-echo "HN_IPS6 ${HN_IPS6[@]}"
-
-CF_PROTECTED_IPS="" # CloudFlare protected ips
-echo "CF_PROTECTED_IPS ${CF_PROTECTED_IPS[@]}"
-
-# Interfaces
-HN_INTERFACE="$(ip -o link show | grep 'link/ether' | awk -F': ' '{print $2}')"
+. ip-interface.sh
 
 # Iptables
 IPTABLES="iptables ip6tables"
