@@ -28,6 +28,7 @@ policy_fx
 
 spamhaus # -I
 cloudflare "${CF_PROTECTED_IPS[@]}" # -I
+yandex_kassa # -I
 
 # INSTALL fail2ban FOR BRUTEFORCE PROTECTION
 # https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-centos-6

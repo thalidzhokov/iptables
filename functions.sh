@@ -141,3 +141,23 @@ cloudflare() {
 
   echo "CloudFlare: END"
 }
+
+yandex_kassa() {
+  echo "Yandex Kassa: START"
+  local SET="YANDEXKASSA"
+
+  local IPS="77.75.155.158 77.75.155.157 77.75.155.149 77.75.155.148 77.75.155.140 77.75.155.139 77.75.158.163 77.75.158.162 77.75.158.154 77.75.158.153 77.75.158.145 77.75.158.144 77.75.159.170 77.75.159.166 77.75.157.169 77.75.157.168"
+
+  echo "Yandex Kassa: delete rules"
+  iptables -D INPUT   -p tcp --dport 443 -m set --match-set $SET src -j ACCEPT
+  iptables -D FORWARD -p tcp --dport 443 -m set --match-set $SET src -j ACCEPT
+
+  set_ipset $SET "${IPS[@]}"
+
+  echo "Yandex Kassa: add rules"
+  iptables -I INPUT   -p tcp --dport 443 -m set --match-set $SET src -j ACCEPT
+  iptables -I FORWARD -p tcp --dport 443 -m set --match-set $SET src -j ACCEPT
+
+
+  echo "Yandex Kassa: END"
+}
