@@ -39,10 +39,14 @@ echo "Adding new INPUT, OUTPUT and FORWARD rules..."
 
 set_ipset "HN_IPS" "${HN_IPS[@]}" # "ip"
 
+echo "LAN"
+iptables -A FORWARD -d 192.168.0.0/16 -j DROP
+iptables -A OUTPUT  -d 192.168.0.0/16 -j DROP
+
 echo "Established, Related"
-iptables -I INPUT   -i $HN_INTERFACE -m set --match-set HN_IPS dst $STATES_ER -j ACCEPT
-iptables -I OUTPUT  -o $HN_INTERFACE -m set --match-set HN_IPS src $STATES_ER -j ACCEPT
-iptables -I FORWARD                                                $STATES_ER -j ACCEPT
+iptables -A INPUT   -i $HN_INTERFACE -m set --match-set HN_IPS dst $STATES_ER -j ACCEPT
+iptables -A OUTPUT  -o $HN_INTERFACE -m set --match-set HN_IPS src $STATES_ER -j ACCEPT
+iptables -A FORWARD                                                $STATES_ER -j ACCEPT
 
 echo "SSH"
 iptables -A INPUT  -i $HN_INTERFACE -m set --match-set HN_IPS dst -p tcp --dport 22 -j ACCEPT
@@ -86,10 +90,6 @@ set_ipset "VE_IPS" "${VE_IPS[@]}" # "ip"
 echo "VM"
 iptables -A FORWARD -m set --match-set VE_IPS src -j ACCEPT
 iptables -A FORWARD -m set --match-set VE_IPS dst -j ACCEPT
-
-echo "LAN"
-iptables -A FORWARD -d 192.168.0.0/16 -j DROP
-iptables -A OUTPUT  -d 192.168.0.0/16 -j DROP
 
 policy_drop
 
