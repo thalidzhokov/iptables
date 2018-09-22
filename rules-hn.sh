@@ -87,6 +87,10 @@ echo "VM"
 iptables -A FORWARD -m set --match-set VE_IPS src -j ACCEPT
 iptables -A FORWARD -m set --match-set VE_IPS dst -j ACCEPT
 
+echo "LAN"
+iptables -A FORWARD -d 192.168.0.0/16 -j DROP
+iptables -A OUTPUT  -d 192.168.0.0/16 -j DROP
+
 policy_drop
 
 
