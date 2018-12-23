@@ -1,10 +1,13 @@
 #!/bin/bash
-# Last update 2017-04-05
+# Last update 2018-12-23
+# CLONE THIS!
+# git clone https://github.com/thalidzhokov/iptables /opt/hdh-iptables
 # NOTICE! Add crontab task
 # e.g.  17      17      *       *       *       bash /opt/hdh-iptables/rules-hn.sh >> /opt/hdh-iptables/rules-hn.log
 
 date
-. ip-interface.sh
+
+PATH="$(dirname "$0")"
 
 # Iptables
 IPTABLES="iptables ip6tables"
@@ -15,7 +18,8 @@ STATES_NER="-m state --state NEW,ESTABLISHED,RELATED"
 STATES_ER=" -m state --state ESTABLISHED,RELATED"
 STATES_N="  -m state --state NEW"
 
-. functions.sh
+. "${PATH}/ip-interface.sh"
+. "${PATH}/functions.sh"
 
 # SCRIPT
 
@@ -26,7 +30,10 @@ service iptables start
 policy_accept
 policy_fx
 
+# Block
 spamhaus # -I
+
+# Accept
 cloudflare "${CF_PROTECTED_IPS[@]}" # -I
 yandex_kassa # -I
 

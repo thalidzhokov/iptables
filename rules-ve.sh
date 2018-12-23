@@ -4,7 +4,8 @@
 # e.g.  17      17      *       *       *       bash /opt/hdh-iptables/rules-ve.sh >> /opt/hdh-iptables/iptables-rules-ve.log
 
 date
-. ip-interface.sh
+
+PATH="$(dirname "$0")"
 
 # Iptables
 IPTABLES="iptables ip6tables"
@@ -15,7 +16,8 @@ STATES_NER="-m state --state NEW,ESTABLISHED,RELATED"
 STATES_ER=" -m state --state ESTABLISHED,RELATED"
 STATES_N="  -m state --state NEW"
 
-. functions.sh
+. "${PATH}/ip-interface.sh"
+. "${PATH}/functions.sh"
 
 # SCRIPT
 
@@ -26,8 +28,12 @@ service iptables start
 policy_accept
 policy_fx
 
+# Block
 spamhaus # -I
+
+# Accept
 cloudflare "${CF_PROTECTED_IPS[@]}" # -I
+yandex_kassa # -I
 
 # INSTALL fail2ban FOR BRUTEFORCE PROTECTION
 # https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-centos-6
